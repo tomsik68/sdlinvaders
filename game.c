@@ -27,7 +27,7 @@ void init_game(SDL_Renderer *r) {
     game.ship.w = spritew(SpaceshipSprite);
     game.ship.h = spriteh(SpaceshipSprite);
 
-    game.inv.x = 0;
+    game.inv.x = -spritew(InvaderSprite);
     game.inv.y = 0;
 
     game.inv.w = spritew(InvaderSprite);
