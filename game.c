@@ -88,6 +88,9 @@ static void move_ship() {
         game.last_move = SDL_GetTicks();
     }
 
+}
+
+static void move_invaders() {
     if (SDL_GetTicks() - game.last_inv_move > 15) {
         game.inv.x += 1;
         game.last_inv_move = SDL_GetTicks();
@@ -103,6 +106,7 @@ void draw_game(SDL_Renderer *r) {
     draw_sprite(r, SpaceshipSprite, &game.ship);
     draw_invaders(r);
     move_ship();
+    move_invaders();
 }
 
 void cleanup_game() { cleanup_spritesheet(); }
