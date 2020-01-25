@@ -4,8 +4,20 @@
 
 static SDL_Texture *spritesheet = NULL;
 
+#define SPRITEW 34
+#define SPRITEH 22
+
+#define SPRITE_AT(col, row) \
+    { SPRITEW * col, SPRITEH * row, SPRITEW, SPRITEH }
+
+#define INVADER_AT(col, row) \
+    SPRITE_AT(col, row), SPRITE_AT((col + 1), row)
+
 static const SDL_Rect sprites[] = {
-    {0, 0, 0, 0}, {410, 312, 32, 18}, {548, 24, 30, 20}, {582, 24, 30, 20}};
+    {0, 0, 0, 0},      SPRITE_AT(12, 14), INVADER_AT(16, 0), INVADER_AT(16, 1),
+    INVADER_AT(16, 2), INVADER_AT(16, 3), INVADER_AT(16, 4), INVADER_AT(16, 5),
+    INVADER_AT(16, 6), INVADER_AT(16, 7), INVADER_AT(16, 8), INVADER_AT(16, 9),
+    INVADER_AT(16, 10)};
 
 int init_spritesheet(SDL_Renderer *r) {
     SDL_Surface *s = IMG_Load("./invader.png");
@@ -27,8 +39,7 @@ void draw_sprite(SDL_Renderer *r, sprite_t sprite, const SDL_Rect *pos) {
     SDL_RenderCopy(r, spritesheet, &sprites[sprite], pos);
 }
 
-unsigned spritew(sprite_t sprite) {
-    return sprites[sprite].w; }
+unsigned spritew(sprite_t sprite) { return sprites[sprite].w; }
 
 unsigned spriteh(sprite_t sprite) { return sprites[sprite].h; }
 

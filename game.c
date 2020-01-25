@@ -1,10 +1,13 @@
 #include <SDL2/SDL.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define WIDTH 800
 #define HEIGHT 600
 
 #define NINVADERS 64
 #define NMAXSHOT 8
+#define NINVADER_TYPES 11
 
 #include "spritesheet.h"
 
@@ -36,7 +39,7 @@ static void init_invaders() {
     game.inv.h = spriteh(InvaderSprite);
 
     for (size_t i = 0; i < NINVADERS; ++i) {
-        game.invader_type[i] = InvaderSprite;
+        game.invader_type[i] = InvaderSprite + 2 * (rand() % NINVADER_TYPES);
     }
 }
 
@@ -50,6 +53,7 @@ static void init_shots() {
 }
 
 void init_game(SDL_Renderer *r) {
+    srand(time(NULL));
     init_spritesheet(r);
     place_ship();
     init_invaders();
@@ -66,11 +70,11 @@ void handle_event(SDL_Event *event) {
 
 static void compute_invader_pos(size_t i, SDL_Rect *pos) {
     sprite_t s = game.invader_type[i];
-    pos->x = game.inv.x + (spritew(s) + 4) * i;
+    pos->x = game.inv.x + (spritew(InvaderSprite) + 4) * i;
     pos->y =
-        game.inv.y + (pos->x / (WIDTH + 2 * spritew(s))) * (spriteh(s) + 4);
-    pos->x %= WIDTH + 2 * spritew(s);
-    pos->x -= spritew(s);
+        game.inv.y + (pos->x / (WIDTH + 2 * spritew(InvaderSprite))) * (spriteh(InvaderSprite) + 4);
+    pos->x %= WIDTH + 2 * spritew(InvaderSprite);
+    pos->x -= spritew(InvaderSprite);
     pos->w = spritew(s);
     pos->h = spriteh(s);
 }

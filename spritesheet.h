@@ -7,7 +7,7 @@ typedef enum {
     EmptySprite = 0,
     SpaceshipSprite,
     InvaderSprite,
-    Invader2Sprite,
+    // Invader sprites follow after this...
 } sprite_t;
 
 int init_spritesheet(SDL_Renderer *r);
