@@ -1,10 +1,11 @@
 CC:=clang
 CFLAGS:= -std=c11 -Wall -Wextra -pedantic $(shell sdl2-config --cflags) -g
-LDFLAGS:= $(shell sdl2-config --libs) -lSDL2_image
+LDFLAGS:= $(shell sdl2-config --libs) -lSDL2_image -lSDL2_ttf
+OBJECTS := main.o game.o spritesheet.o text.o ui.o
 
 all: main
 
-main: main.o game.o spritesheet.o
+main: $(OBJECTS)
 
 %.o: %.c %.h
 

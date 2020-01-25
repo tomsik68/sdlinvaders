@@ -1,5 +1,6 @@
 #include "spritesheet.h"
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 static SDL_Texture *spritesheet = NULL;
@@ -24,8 +25,7 @@ int init_spritesheet(SDL_Renderer *r) {
     if (!s) {
         return 0;
     }
-
-    SDL_SetColorKey(s, SDL_TRUE, 0);
+    SDL_SetColorKey(s, SDL_TRUE, SDL_MapRGB(s->format, 0, 0, 0));
 
     spritesheet = SDL_CreateTextureFromSurface(r, s);
 

@@ -10,6 +10,7 @@
 #define NINVADER_TYPES 11
 
 #include "spritesheet.h"
+#include "ui.h"
 
 typedef struct game {
     SDL_Rect ship;
@@ -34,7 +35,7 @@ static void place_ship() {
 
 static void init_invaders() {
     game.inv.x = -spritew(InvaderSprite);
-    game.inv.y = 0;
+    game.inv.y = 100;
     game.inv.w = spritew(InvaderSprite);
     game.inv.h = spriteh(InvaderSprite);
 
@@ -58,6 +59,7 @@ void init_game(SDL_Renderer *r) {
     place_ship();
     init_invaders();
     init_shots();
+    init_ui();
 
     game.last_move = 0;
     game.last_inv_move = 0;
@@ -71,8 +73,8 @@ void handle_event(SDL_Event *event) {
 static void compute_invader_pos(size_t i, SDL_Rect *pos) {
     sprite_t s = game.invader_type[i];
     pos->x = game.inv.x + (spritew(InvaderSprite) + 4) * i;
-    pos->y =
-        game.inv.y + (pos->x / (WIDTH + 2 * spritew(InvaderSprite))) * (spriteh(InvaderSprite) + 4);
+    pos->y = game.inv.y + (pos->x / (WIDTH + 2 * spritew(InvaderSprite))) *
+                              (spriteh(InvaderSprite) + 4);
     pos->x %= WIDTH + 2 * spritew(InvaderSprite);
     pos->x -= spritew(InvaderSprite);
     pos->w = spritew(s);
@@ -154,6 +156,7 @@ static void move_shots() {
                     SDL_TRUE) {
                     game.invader_type[j] = EmptySprite;
                     game.shots[i].x = -999;
+                    add_score(10);
                     break;
                 }
             }
@@ -170,12 +173,14 @@ static void move_invaders() {
             game.inv.x = -spritew(InvaderSprite);
             game.inv.y += spriteh(InvaderSprite) + 3;
         }
+
         move_shots();
     }
 }
 
 static void draw_shots(SDL_Renderer *r) {
     SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
+
     for (size_t i = 0; i < NMAXSHOT; ++i) {
         SDL_RenderFillRect(r, &game.shots[i]);
     }
@@ -189,6 +194,11 @@ void draw_game(SDL_Renderer *r) {
 
     move_ship();
     move_invaders();
+
+    draw_ui(r);
 }
 
-void cleanup_game() { cleanup_spritesheet(); }
+void cleanup_game() {
+    cleanup_spritesheet();
+    cleanup_ui();
+}

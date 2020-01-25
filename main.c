@@ -7,10 +7,16 @@
 
 #define MS_IN_FRAME (1000 / 60)
 
+static SDL_PixelFormat *pixelFormat = NULL;
+
 int main() {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
         puts(SDL_GetError());
         goto init_fail;
+    }
+
+    if (init_text() == -1) {
+        goto ttf_fail;
     }
 
     SDL_Window *wnd =
@@ -49,10 +55,14 @@ int main() {
     }
 
     cleanup_game();
+	SDL_FreeFormat(pixelFormat);
+	pixelFormat = NULL;
     SDL_DestroyRenderer(r);
 renderer_fail:
     SDL_DestroyWindow(wnd);
 window_fail:
+    cleanup_text();
+ttf_fail:
     SDL_Quit();
 init_fail:
 
