@@ -9,7 +9,7 @@ int init_text() {
         return -1;
     }
 
-    font = TTF_OpenFont("ka1.ttf", 10);
+    font = TTF_OpenFont("ka1.ttf", 20);
     if (!font)
         return -1;
 

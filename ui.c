@@ -8,7 +8,7 @@
 static const SDL_Rect uiRect = {0, 0, 800, 50};
 static const SDL_Rect uiInvadersShotRect = {50, 10, 30, 20};
 
-static SDL_Rect scoreTextureOnScreen = {100, 10, 16, 16};
+static SDL_Rect scoreTextureOnScreen = {10, 10, 16, 16};
 static SDL_Rect scoreTextureRect = {0, 0, 0, 0};
 
 static unsigned score = 0;
@@ -25,13 +25,14 @@ static void redraw_score(SDL_Renderer *r) {
         scoreTexture = NULL;
     }
 
-    snprintf(buf, 16, "score %u", score);
+    snprintf(buf, 16, "%u", score);
 
     SDL_Surface *scoreSurface = draw_text(buf, textColor);
     scoreTextureRect.w = scoreSurface->w;
     scoreTextureRect.h = scoreSurface->h;
     scoreTextureOnScreen.w = scoreTextureRect.w;
     scoreTextureOnScreen.h = scoreTextureRect.h;
+    scoreTextureOnScreen.x = 800 / 2 - scoreTextureOnScreen.w/2;
     scoreTexture = SDL_CreateTextureFromSurface(r, scoreSurface);
     SDL_FreeSurface(scoreSurface);
     needRedraw = SDL_FALSE;
@@ -40,14 +41,13 @@ static void redraw_score(SDL_Renderer *r) {
 int init_ui() {}
 
 void draw_ui(SDL_Renderer *r) {
-    if (needRedraw) {
+    if (needRedraw == SDL_TRUE) {
         redraw_score(r);
     }
 
     SDL_SetRenderDrawColor(r, 40, 40, 40, 255);
     SDL_RenderFillRect(r, &uiRect);
 
-    /* draw_sprite(r, InvaderSprite, &uiInvadersShotRect); */
     SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
 
     SDL_RenderCopy(r, scoreTexture, &scoreTextureRect, &scoreTextureOnScreen);
