@@ -65,3 +65,7 @@ void cleanup_ui() {
     }
 }
 
+void reset_score() {
+    score = 0;
+    needRedraw = SDL_TRUE;
+}

@@ -29,6 +29,7 @@ int main() {
     if (!r) {
         goto renderer_fail;
     }
+    SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
 
     init_game(r);
 

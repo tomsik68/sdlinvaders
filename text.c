@@ -6,6 +6,7 @@ static TTF_Font *font = NULL;
 
 int init_text() {
     if (TTF_Init() == -1) {
+        puts(TTF_GetError());
         return -1;
     }
 
