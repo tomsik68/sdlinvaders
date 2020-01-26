@@ -10,6 +10,7 @@ This game doesn't come with assets. You need to get `invader.png` from spritelib
 + SDL2
 + SDL2_image (for loading PNG)
 + SDL2_ttf (for loading font)
++ SDL2_mixer (for playing WAV)
 
 ## Building
 

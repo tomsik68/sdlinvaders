@@ -19,6 +19,8 @@ int main() {
         goto ttf_fail;
     }
 
+	init_sound();
+
     SDL_Window *wnd =
         SDL_CreateWindow("test", 0, 0, 800, 600, SDL_WINDOW_BORDERLESS);
     if (!wnd) {
@@ -62,6 +64,7 @@ int main() {
 renderer_fail:
     SDL_DestroyWindow(wnd);
 window_fail:
+	cleanup_sound();
     cleanup_text();
 ttf_fail:
     SDL_Quit();

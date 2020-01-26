@@ -13,6 +13,7 @@
 #include "spritesheet.h"
 #include "text.h"
 #include "ui.h"
+#include "sound.h"
 
 static SDL_Rect ship;
 static SDL_Rect shots[NMAXSHOT];
@@ -137,16 +138,19 @@ void handle_event(SDL_Event *event) {
     if (state == Menu) {
         if (event->type == SDL_KEYDOWN && !ke->repeat &&
             ke->keysym.scancode == SDL_SCANCODE_RETURN) {
+			play_sound(Beep);
             transition_menu_to_game();
         }
     } else if (state == Game) {
         if (event->type == SDL_KEYDOWN && !ke->repeat &&
             ke->keysym.scancode == SDL_SCANCODE_P) {
+			play_sound(Beep);
             transition_game_to_pause();
         }
     } else if (state == Pause) {
         if (event->type == SDL_KEYDOWN && !ke->repeat &&
             ke->keysym.scancode == SDL_SCANCODE_P) {
+			play_sound(Beep);
             transition_pause_to_game();
         }
     }
@@ -187,6 +191,7 @@ static void shoot() {
             if (shots[i].x == -999) {
                 shots[i].x = ship.x + spritew(SpaceshipSprite) / 2;
                 shots[i].y = ship.y - 4;
+				play_sound(Laser);
                 break;
             }
         }
@@ -233,6 +238,7 @@ static void move_shots() {
                     invader_type[j] = EmptySprite;
                     shots[i].x = -999;
                     add_score(10);
+					play_sound(Hit);
                     break;
                 }
             }
