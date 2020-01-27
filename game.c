@@ -10,10 +10,10 @@
 #define NMAXSHOT 8
 #define NINVADER_TYPES 11
 
+#include "sound.h"
 #include "spritesheet.h"
 #include "text.h"
 #include "ui.h"
-#include "sound.h"
 
 static SDL_Rect ship;
 static SDL_Rect shots[NMAXSHOT];
@@ -25,7 +25,7 @@ static unsigned last_shot;
 static SDL_Rect inv;
 static sprite_t invader_type[NINVADERS];
 
-static SDL_Rect screenRect = {0, 0, WIDTH, HEIGHT};
+static const SDL_Rect screenRect = {0, 0, WIDTH, HEIGHT};
 static SDL_Texture *background = NULL;
 
 static SDL_Texture *startGameText = NULL;
@@ -46,7 +46,7 @@ static state_t state = Menu;
 
 static void place_ship() {
     ship.x = WIDTH / 2 - spritew(SpaceshipSprite) / 2;
-    ship.y = HEIGHT - spriteh(SpaceshipSprite);
+    ship.y = HEIGHT - 2 * spriteh(SpaceshipSprite);
     ship.w = spritew(SpaceshipSprite);
     ship.h = spriteh(SpaceshipSprite);
 }
@@ -125,32 +125,28 @@ static void transition_menu_to_game() {
     init_shots();
 }
 
-static void transition_game_to_pause() {
-    state = Pause;
-}
+static void transition_game_to_pause() { state = Pause; }
 
-static void transition_pause_to_game() {
-    state = Game;
-}
+static void transition_pause_to_game() { state = Game; }
 
 void handle_event(SDL_Event *event) {
     SDL_KeyboardEvent *ke = (SDL_KeyboardEvent *)event;
     if (state == Menu) {
         if (event->type == SDL_KEYDOWN && !ke->repeat &&
             ke->keysym.scancode == SDL_SCANCODE_RETURN) {
-			play_sound(Beep);
+            play_sound(Beep);
             transition_menu_to_game();
         }
     } else if (state == Game) {
         if (event->type == SDL_KEYDOWN && !ke->repeat &&
             ke->keysym.scancode == SDL_SCANCODE_P) {
-			play_sound(Beep);
+            play_sound(Beep);
             transition_game_to_pause();
         }
     } else if (state == Pause) {
         if (event->type == SDL_KEYDOWN && !ke->repeat &&
             ke->keysym.scancode == SDL_SCANCODE_P) {
-			play_sound(Beep);
+            play_sound(Beep);
             transition_pause_to_game();
         }
     }
@@ -191,7 +187,7 @@ static void shoot() {
             if (shots[i].x == -999) {
                 shots[i].x = ship.x + spritew(SpaceshipSprite) / 2;
                 shots[i].y = ship.y - 4;
-				play_sound(Laser);
+                play_sound(Laser);
                 break;
             }
         }
@@ -223,14 +219,14 @@ static void move_shots() {
     SDL_Rect invader;
 
     for (size_t i = 0; i < NMAXSHOT; ++i) {
-        shots[i].y -= 2;
-
-        if (shots[i].y < -10) {
-            shots[i].x = -999;
-            shots[i].y = -999;
-        }
-
         if (shots[i].x != -999) {
+            shots[i].y -= 2;
+
+            if (shots[i].y < -10) {
+                shots[i].x = -999;
+                shots[i].y = -999;
+            }
+
             for (size_t j = 0; j < NINVADERS; ++j) {
                 compute_invader_pos(j, &invader);
                 if (SDL_IntersectRect(&shots[i], &invader, &dummy) ==
@@ -238,7 +234,7 @@ static void move_shots() {
                     invader_type[j] = EmptySprite;
                     shots[i].x = -999;
                     add_score(10);
-					play_sound(Hit);
+                    play_sound(Hit);
                     break;
                 }
             }
